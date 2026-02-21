@@ -1,2 +1,173 @@
-# hitamputih
-hitam putih
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday!</title>
+  <style>
+    /* TEMA CHARCOAL MODERN */
+    body { 
+      background: #1a1a1a; 
+      color: #f5f5f5; 
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+      margin: 0; 
+      height: 100vh; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      overflow: hidden; 
+    }
+
+    .page { display: none; text-align: center; padding: 20px; animation: fadeIn 1s ease-in-out; }
+    .active { display: block; }
+    
+    h1, h2 { font-weight: 300; letter-spacing: 2px; text-transform: uppercase; }
+
+    /* TOMBOL MINIMALIS */
+    .btn { 
+      background: transparent; 
+      color: #f5f5f5; 
+      border: 1px solid #f5f5f5; 
+      padding: 12px 30px; 
+      border-radius: 30px; 
+      cursor: pointer; 
+      margin-top: 25px; 
+      font-size: 14px;
+      transition: all 0.4s;
+    }
+    .btn:hover { background: #f5f5f5; color: #1a1a1a; }
+
+    /* KOTAK PESAN GLASSMORPHISM */
+    .box { 
+      background: rgba(255, 255, 255, 0.05); 
+      color: #f5f5f5; 
+      padding: 25px; 
+      border-radius: 15px; 
+      max-width: 320px; 
+      text-align: left; 
+      margin: 20px auto; 
+      line-height: 1.8;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+    }
+
+    /* GAYA FOTO POLAROID */
+    .polaroid-frame {
+      background: white;
+      padding: 10px 10px 35px 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      display: inline-block;
+      transform: rotate(-3deg);
+      margin-bottom: 20px;
+      border-radius: 2px;
+    }
+    .polaroid-frame img {
+      width: 200px; 
+      height: auto;
+      display: block;
+    }
+    .polaroid-caption {
+      color: #333;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    
+    .falling { position: fixed; top: -50px; animation: fall linear infinite; z-index: 999; pointer-events: none; }
+    .gif-img { width: 120px; height: auto; margin-bottom: 20px; }
+    
+    @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <audio id="lagu" src="music.mp3" loop></audio>
+
+  <div id="p1" class="page active">
+    <img class="gif-img" src="gif1.gif">
+    <h1>It's your day.</h1>
+    <p style="opacity: 0.7;">Ada sesuatu untukmu...</p>
+    <button class="btn" onclick="pindah(2)">MULAI</button>
+  </div>
+
+  <div id="p2" class="page">
+    <div class="polaroid-frame">
+      <img src="foto.jpg" alt="Our Moment">
+      <div class="polaroid-caption">My Favorite Person ♡</div>
+    </div>
+    <p style="opacity: 0.7;">Sebuah kenangan, dan sebuah pesan...</p>
+    <button class="btn" onclick="pindah(3)">BACA SURAT</button>
+  </div>
+
+  <div id="p3" class="page">
+    <h2 style="font-size: 1.2rem;">Happy Birthday.</h2>
+    <div class="box" id="isiTeks"></div>
+    <button id="btnLanjut" class="btn" style="display:none;" onclick="pindah(4)">LANJUT</button>
+  </div>
+
+  <div id="p4" class="page">
+    <img class="gif-img" src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Heart%20with%20Arrow.png">
+    <h2>Finally...</h2>
+    <div class="box">
+      "Semoga tahun ini membawa banyak kebahagiaan untukmu. Terima kasih sudah menjadi bagian dari hariku. I love you more than you know. ❤️"
+    </div>
+    <button class="btn" onclick="alert('I Love You More! ❤️')">CLOSE</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    // Ucapannya bisa kamu ganti di sini
+    var pesan = "Selamat ulang tahun ya! Aku bangga melihatmu sampai di titik ini. Teruslah jadi versi terbaik dirimu, dan ingatlah bahwa aku akan selalu mendukungmu. ❤️✨";
+
+    function pindah(n) {
+      if(n === 2) {
+        var audio = document.getElementById('lagu');
+        audio.play().catch(e => console.log("Musik jalan setelah klik"));
+      }
+
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('p' + n).classList.add('active');
+
+      if(n === 3) {
+        confetti({ particleCount: 80, spread: 60, colors: ['#ffffff', '#444444'] });
+        mulaiNgetik();
+        setInterval(() => hujanAnimasi('✨'), 600);
+      }
+      if(n === 4) {
+        setInterval(() => hujanAnimasi('🤍'), 700);
+        confetti({ particleCount: 100, spread: 90, colors: ['#ffffff', '#666666'] });
+      }
+    }
+
+    function mulaiNgetik() {
+      var i = 0;
+      var target = document.getElementById('isiTeks');
+      target.innerHTML = ""; 
+      function ketik() {
+        if (i < pesan.length) {
+          target.innerHTML += pesan.charAt(i);
+          i++;
+          setTimeout(ketik, 60);
+        } else {
+          document.getElementById('btnLanjut').style.display = 'inline-block';
+        }
+      }
+      ketik();
+    }
+
+    function hujanAnimasi(simbol) {
+      var el = document.createElement('div');
+      el.className = 'falling';
+      el.innerHTML = simbol;
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.fontSize = '20px';
+      el.style.opacity = '0.5';
+      el.style.animationDuration = (Math.random() * 3 + 3) + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 5000);
+    }
+  </script>
+</body>
+</html>
